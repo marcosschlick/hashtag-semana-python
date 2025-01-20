@@ -1,97 +1,54 @@
-# pip install pyautogui
-import pyautogui
-import time
+# Passo 1: Entrar no sistema da empresa 
+# Link para acesso ao sistema: https://dlp.hashtagtreinamentos.com/python/intensivao/login
 
-# pausa para cada comando
-pyautogui.PAUSE = 0.5
+import pyautogui  # Biblioteca para automação de ações no teclado e mouse
+import time       # Biblioteca para gerenciar pausas no código
 
-# pyautogui.click -> clicar
-# pyautogui.press -> pressionar uma tecla
-# pyautogui.write -> escrever
-# pyautogui.hotkey("ctrl" , "c") -> combinações
+# Configuração global: define uma pausa de 0.3 segundos entre as ações do pyautogui
+pyautogui.PAUSE = 0.3
 
-pyautogui.press("win")
+# Abrir o navegador (chrome)
+pyautogui.press("win")  # Pressiona a tecla Windows
+pyautogui.write("chrome")  # Digita "chrome" para buscar o navegador
+pyautogui.press("enter")  # Pressiona Enter para abrir o navegador
 
-pyautogui.write("chrome")
+# Acessar o link do sistema
+pyautogui.write("https://dlp.hashtagtreinamentos.com/python/intensivao/login")  # Digita o link
+pyautogui.press("enter")  # Pressiona Enter para carregar a página
+time.sleep(3)  # Aguarda 3 segundos para a página carregar
 
-pyautogui.press("enter")
+# Passo 2: Fazer login
+pyautogui.click(x=685, y=451)  # Clica no campo de email
+pyautogui.write("pythonimpressionador@gmail.com")  # Digita o email
+pyautogui.press("tab")  # Navega para o próximo campo (senha)
+pyautogui.write("sua senha")  # Digita a senha
+pyautogui.click(x=955, y=638)  # Clica no botão de login
+time.sleep(3)  # Aguarda 3 segundos para o login ser processado
 
+# Passo 3: Importar a base de produtos
+import pandas as pd  # Biblioteca para manipulação de dados
+tabela = pd.read_csv("produtos.csv")  # Lê os dados do arquivo CSV
+print(tabela)  # Exibe os dados carregados
 
-pyautogui.write("https://dlp.hashtagtreinamentos.com/python/intensivao/login")
-
-pyautogui.press("enter")
-
-pyautogui.press("f11")
-
-time.sleep(3)
-
-# login
-pyautogui.press("tab")
-# pyautogui.click(x=700, y=370) 
-
-pyautogui.write("batatinha@gmail.com")
-
-# próximo campo
-pyautogui.press("tab")
-
-pyautogui.write("sofia pq voce nunca avisa onde vai porra")
-
-pyautogui.press("tab")
-
-pyautogui.press("enter")
-                
-# pip install pandas openpyxl
-import pandas
-
-# pandas.read_csv("C:\Users\marcos\Downloads\produtos.csv")
-tabela = pandas.read_csv("produtos.csv")
-
-time.sleep(2)
-
-# for coluna in tabela.columns
-
-for linha in tabela.index:
-    pyautogui.click(x=920, y=170)
-
-    # código
-    codigo = tabela.loc[linha, "codigo"]
-    pyautogui.write(codigo)
+# Passo 4: Cadastrar um produto
+for linha in tabela.index:  # Itera por cada linha da tabela
+    pyautogui.click(x=653, y=294)  # Clica no campo de código do produto
+    codigo = tabela.loc[linha, "codigo"]  # Obtém o código do produto
+    pyautogui.write(str(codigo))  # Digita o código
+    pyautogui.press("tab")  # Avança para o próximo campo
+    pyautogui.write(str(tabela.loc[linha, "marca"]))  # Digita a marca
+    pyautogui.press("tab")  
+    pyautogui.write(str(tabela.loc[linha, "tipo"]))  # Digita o tipo
     pyautogui.press("tab")
-
-    # marca
-    marca = tabela.loc[linha, "marca"]
-    pyautogui.write(marca)
+    pyautogui.write(str(tabela.loc[linha, "categoria"]))  # Digita a categoria
     pyautogui.press("tab")
-
-    # tipo
-    tipo = tabela.loc[linha, "tipo"]
-    pyautogui.write(tipo)
+    pyautogui.write(str(tabela.loc[linha, "preco_unitario"]))  # Digita o preço
     pyautogui.press("tab")
-
-    # categoria
-    categoria = tabela.loc[linha, "categoria"]
-    # str converte para string
-    pyautogui.write(str(categoria)) 
+    pyautogui.write(str(tabela.loc[linha, "custo"]))  # Digita o custo
     pyautogui.press("tab")
-
-    # preco_unitario
-    preco_unitario = tabela.loc[linha, "preco_unitario"]
-    pyautogui.write(str(preco_unitario))
+    obs = tabela.loc[linha, "obs"]  # Verifica o campo de observações
+    if not pd.isna(obs):  # Se não for vazio ou NaN, digita as observações
+        pyautogui.write(str(obs))
     pyautogui.press("tab")
-
-    # custo
-    custo = tabela.loc[linha, "custo"]
-    pyautogui.write(str(custo))
-    pyautogui.press("tab")
-
-    # obs
-    obs = str(tabela.loc[linha, "obs"])    
-    if obs != "nan":
-            pyautogui.write(obs)
-
-    pyautogui.press("tab")
-    pyautogui.press("enter")
-
-    # pyautogui.press("pgup")
-    pyautogui.scroll(5000)
-
+    pyautogui.press("enter")  # Confirma o cadastro do produto
+    pyautogui.scroll(5000)  # Rola a tela para o início para evitar sobreposição
